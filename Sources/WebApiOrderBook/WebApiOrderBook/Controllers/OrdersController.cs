@@ -21,7 +21,7 @@ namespace WebApiOrderBook.Controllers
 
         // GET: api/Orders 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Book>>> GetOrders()
+        public async Task<ActionResult<IEnumerable<OrderDto>>> GetOrders()
         {
             var orders = await _orderRepositoriy.GetAllOrderAsync();
 
@@ -29,26 +29,27 @@ namespace WebApiOrderBook.Controllers
             {
                 return NotFound();
             }
-            return Ok(orders);
+            var ordersDto = _mapper.Map<IEnumerable<OrderDto>>(orders);
+            return Ok(ordersDto);
         }
 
         // GET: api/Orders/Search
         [HttpGet]
         [Route("Search")]
-        public async Task<ActionResult<Order>> GetFilteredOrders(int number, DateTime data)
+        public async Task<ActionResult<OrderDto>> GetFilteredOrders(int number, DateTime data)
         {
             var orders = await _orderRepositoriy.GetFilteredOrders(number, data);
             if (orders == null)
             {
                 return NotFound();
             }
-            
+            var ordersDto = _mapper.Map<IEnumerable<OrderDto>>(orders);
             return Ok(orders);
         }
 
         // POST: api/Orders        
         [HttpPost]
-        public async Task<ActionResult<Order>> PostOrder(string title, string summary, DateTime startDate)
+        public async Task<ActionResult<OrderDto>> PostOrder(string title, string summary, DateTime startDate)
         {
             var book = new Book() { Title = title, Summary = summary, StartDate = startDate };
             var order = new Order() { Data = DateTime.Now.Date };
