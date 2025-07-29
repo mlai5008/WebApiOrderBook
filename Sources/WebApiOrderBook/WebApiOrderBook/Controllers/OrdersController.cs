@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApiOrderBook.Models;
 using WebApiOrderBook.Models.Dto;
 using WebApiOrderBook.Repositories.Interfaces;
@@ -29,6 +30,20 @@ namespace WebApiOrderBook.Controllers
             {
                 return NotFound();
             }
+            return Ok(orders);
+        }
+
+        // GET: api/Orders/Search
+        [HttpGet]
+        [Route("Search")]
+        public async Task<ActionResult<Order>> GetFilteredOrders(int number, DateTime data)
+        {
+            var orders = await _orderRepositoriy.GetFilteredOrders(number, data);
+            if (orders == null)
+            {
+                return NotFound();
+            }
+            
             return Ok(orders);
         }
 

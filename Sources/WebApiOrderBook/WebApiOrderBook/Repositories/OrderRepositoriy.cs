@@ -24,6 +24,28 @@ namespace WebApiOrderBook.Repositories
             return await _context.Orders.Include(b => b.Books).ToListAsync();
         }
 
+        public async Task<IEnumerable<Order>> GetFilteredOrders(int number, DateTime data)
+        {
+            if (_context.Orders == null)
+            {
+                return await Task.FromResult<IEnumerable<Order>>(default);
+            }
+
+            var query = _context.Orders.AsQueryable();
+
+            if (number != default)
+            {
+                query = query.Where(d => d.Number == number);
+            }
+
+            if (data != default)
+            {
+                query = query.Where(d => d.Data == data);
+            }
+
+            return await query.Include(b => b.Books).ToListAsync();
+        }
+
         public async Task<Order?> AddOrderAsync(Order order, Book book)
         {
             if (_context.Orders == null)
@@ -45,6 +67,8 @@ namespace WebApiOrderBook.Repositories
             _context.Books.Add(book);
             await _context.SaveChangesAsync();
             return order;
-        }        
+        }
+
+        
     }
 }
