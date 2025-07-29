@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using WebApiOrderBook.Models;
 using WebApiOrderBook.Models.Dto;
 using WebApiOrderBook.Repositories.Interfaces;

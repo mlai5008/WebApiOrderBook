@@ -52,6 +52,13 @@ namespace WebApiOrderBook
 
             app.MapControllers();
 
+            //for (localdb)\\MSSQLLocalDB
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<ShopDbContext>();
+                context.Database.Migrate();                
+            }
+
             app.Run();
         }
     }
