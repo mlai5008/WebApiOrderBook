@@ -42,11 +42,6 @@ namespace WebApiOrderBook.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<BookDto>> GetBook(Guid id)
         {
-            if (_context.Books == null)
-            {
-                return NotFound();
-            }
-            
             var book = await _bookRepositoriy.GetBookByIdAsync(id);
 
             if (book == null)
