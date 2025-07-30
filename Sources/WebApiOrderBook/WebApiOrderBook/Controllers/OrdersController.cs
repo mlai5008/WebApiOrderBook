@@ -10,15 +10,20 @@ namespace WebApiOrderBook.Controllers
     [ApiController]
     public class OrdersController : ControllerBase
     {
+        #region Fields
         private readonly IOrderRepositoriy _orderRepositoriy;
-        private readonly IMapper _mapper;
+        private readonly IMapper _mapper; 
+        #endregion
 
+        #region Сonstructor
         public OrdersController(IOrderRepositoriy orderRepositoriy, IMapper mapper)
         {
             _orderRepositoriy = orderRepositoriy;
             _mapper = mapper;
-        }
+        } 
+        #endregion
 
+        #region Methods
         // GET: api/Orders 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<OrderDto>>> GetOrders()
@@ -53,15 +58,16 @@ namespace WebApiOrderBook.Controllers
         {
             var book = new Book() { Title = title, Summary = summary, StartDate = startDate };
             var order = new Order() { Data = DateTime.Now.Date };
-            
+
             var newOrder = await _orderRepositoriy.AddOrderAsync(order, book);
 
             if (newOrder == null)
             {
                 return Problem("Entity set order is null.");
             }
-            var orderDto = _mapper.Map<OrderDto>(newOrder);            
+            var orderDto = _mapper.Map<OrderDto>(newOrder);
             return CreatedAtAction("PostOrder", orderDto);
-        }
+        } 
+        #endregion
     }
 }

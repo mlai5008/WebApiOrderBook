@@ -9,16 +9,21 @@ namespace WebApiOrderBook.Controllers
     [Route("api/[controller]")]
     [ApiController]
     public class BooksController : ControllerBase
-    {        
+    {
+        #region Fields
         private readonly IBookRepositoriy _bookRepositoriy;
         private readonly IMapper _mapper;
+        #endregion
 
+        #region Сonstructor
         public BooksController(IBookRepositoriy bookRepositoriy, IMapper mapper)
-        {            
+        {
             _bookRepositoriy = bookRepositoriy;
             _mapper = mapper;
         }
+        #endregion
 
+        #region Methods
         // GET: api/Books
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookDto>>> GetBooks()
@@ -49,7 +54,7 @@ namespace WebApiOrderBook.Controllers
 
         // GET: api/Books/Search
         [HttpGet]
-        [Route("Search")]        
+        [Route("Search")]
         public async Task<ActionResult<BookDto>> GetFilteredBook(string title, DateTime startDate)
         {
             var books = await _bookRepositoriy.GetFilteredBooks(title, startDate);
@@ -58,7 +63,7 @@ namespace WebApiOrderBook.Controllers
                 return NotFound();
             }
             var bookDto = _mapper.Map<IEnumerable<BookDto>>(books);
-            return Ok(bookDto);            
+            return Ok(bookDto);
         }
 
         // POST: api/Books
@@ -67,7 +72,7 @@ namespace WebApiOrderBook.Controllers
         public async Task<ActionResult<BookDto>> PostBook(string title, string summary, DateTime startDate)
         {
             var book = new Book() { Title = title, Summary = summary, StartDate = startDate };
-           
+
             var newBook = await _bookRepositoriy.AddBookAsync(book);
 
             if (newBook == null)
@@ -76,6 +81,7 @@ namespace WebApiOrderBook.Controllers
             }
             var bookDto = _mapper.Map<BookDto>(newBook);
             return CreatedAtAction("GetBook", new { id = bookDto.Id }, bookDto);
-        }        
+        }    
+        #endregion
     }
 }

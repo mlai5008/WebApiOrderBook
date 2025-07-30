@@ -8,6 +8,7 @@ namespace WebApiOrderBook
 {
     public class Program
     {
+        #region Methods
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
@@ -34,7 +35,7 @@ namespace WebApiOrderBook
                 options.SuppressAsyncSuffixInActionNames = false;
             });
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
-           
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -56,10 +57,11 @@ namespace WebApiOrderBook
             using (var scope = app.Services.CreateScope())
             {
                 var context = scope.ServiceProvider.GetRequiredService<ShopDbContext>();
-                context.Database.Migrate();                
+                context.Database.Migrate();
             }
 
             app.Run();
-        }
+        } 
+        #endregion
     }
 }

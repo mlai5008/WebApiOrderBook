@@ -8,21 +8,26 @@ namespace WebApiOrderBook.Repositories
 {
     public class BookRepositoriy : IBookRepositoriy
     {
-        private readonly ShopDbContext _context;
+        #region Fields
+        private readonly ShopDbContext _context; 
+        #endregion
 
+        #region Сonstructor
         public BookRepositoriy(ShopDbContext context)
         {
             _context = context;
-        }
+        } 
+        #endregion
 
+        #region Methods
         public async Task<IEnumerable<Book>> GetAllBookAsync()
         {
             if (_context.Books == null)
-            {                
+            {
                 return await Task.FromResult<IEnumerable<Book>>(default);
             }
 
-            return await _context.Books.Include(b => b.Order).ToListAsync();           
+            return await _context.Books.Include(b => b.Order).ToListAsync();
         }
 
         public async Task<Book?> GetBookByIdAsync(Guid id)
@@ -66,6 +71,7 @@ namespace WebApiOrderBook.Repositories
             _context.Books.Add(book);
             await _context.SaveChangesAsync();
             return book;
-        }        
+        }  
+        #endregion
     }
 }

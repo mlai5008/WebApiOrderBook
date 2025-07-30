@@ -7,13 +7,18 @@ namespace WebApiOrderBook.Repositories
 {
     public class OrderRepositoriy : IOrderRepositoriy
     {
+        #region Fields
         private readonly ShopDbContext _context;
+        #endregion
 
+        #region Сonstructor
         public OrderRepositoriy(ShopDbContext context)
         {
             _context = context;
         }
+        #endregion
 
+        #region Methods
         public async Task<IEnumerable<Order>> GetAllOrderAsync()
         {
             if (_context.Orders == null)
@@ -67,8 +72,7 @@ namespace WebApiOrderBook.Repositories
             _context.Books.Add(book);
             await _context.SaveChangesAsync();
             return order;
-        }
-
-        
+        } 
+        #endregion
     }
 }
