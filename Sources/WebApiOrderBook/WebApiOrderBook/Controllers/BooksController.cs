@@ -1,25 +1,20 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WebApiOrderBook.Data;
 using WebApiOrderBook.Models;
 using WebApiOrderBook.Models.Dto;
 using WebApiOrderBook.Repositories.Interfaces;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace WebApiOrderBook.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class BooksController : ControllerBase
-    {
-        private readonly ShopDbContext _context;
+    {        
         private readonly IBookRepositoriy _bookRepositoriy;
         private readonly IMapper _mapper;
 
-        public BooksController(ShopDbContext context, IBookRepositoriy bookRepositoriy, IMapper mapper)
-        {
-            _context = context;
+        public BooksController(IBookRepositoriy bookRepositoriy, IMapper mapper)
+        {            
             _bookRepositoriy = bookRepositoriy;
             _mapper = mapper;
         }
@@ -57,24 +52,13 @@ namespace WebApiOrderBook.Controllers
         [Route("Search")]        
         public async Task<ActionResult<BookDto>> GetFilteredBook(string title, DateTime startDate)
         {
-            if (_context.Books == null)
+            var books = await _bookRepositoriy.GetFilteredBooks(title, startDate);
+            if (books == null)
             {
                 return NotFound();
             }
-
-            var query = _context.Books.AsQueryable();
-
-            if (!string.IsNullOrEmpty(title))
-            {
-                query = query.Where(d => d.Title == title);
-            }
-
-            if (startDate != default(DateTime))
-            {
-                query = query.Where(d => d.StartDate == startDate);
-            }            
-
-            return Ok(await query.ToListAsync());
+            var bookDto = _mapper.Map<IEnumerable<BookDto>>(books);
+            return Ok(bookDto);            
         }
 
         // POST: api/Books

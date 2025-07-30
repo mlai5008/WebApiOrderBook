@@ -6,6 +6,7 @@ namespace WebApiOrderBook.Repositories.Interfaces
     {
         Task<IEnumerable<Book>> GetAllBookAsync();
         Task<Book?> GetBookByIdAsync(Guid id);
+        Task<IEnumerable<Book>> GetFilteredBooks(string title, DateTime startDate);
         Task<Book?> AddBookAsync(Book book);
     }
 }
