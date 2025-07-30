@@ -29,7 +29,7 @@ namespace WebApiOrderBook.Repositories
             return await _context.Orders.Include(b => b.Books).ToListAsync();
         }
 
-        public async Task<IEnumerable<Order>> GetFilteredOrders(int number, DateTime data)
+        public async Task<IEnumerable<Order>> GetFilteredOrdersAsync(int number, DateTime data)
         {
             if (_context.Orders == null)
             {
@@ -72,7 +72,27 @@ namespace WebApiOrderBook.Repositories
             _context.Books.Add(book);
             await _context.SaveChangesAsync();
             return order;
-        } 
+        }
+
+        public async Task<Order?> AddNewBookInOrderAsync(Guid idOrder, Book book)
+        {
+            if (_context.Orders == null || _context.Books    == null)
+            {
+                return await Task.FromResult<Order>(default);
+            }
+
+            var order = await _context.Orders.Include(i => i.Books).FirstOrDefaultAsync(o => o.Id == idOrder);
+
+            if (book == null || order == null) 
+            {
+                return await Task.FromResult<Order>(default);
+            }
+
+            _context.Books.Add(book);
+            book.Order = order;            
+            await _context.SaveChangesAsync();
+            return order;
+        }
         #endregion
     }
 }

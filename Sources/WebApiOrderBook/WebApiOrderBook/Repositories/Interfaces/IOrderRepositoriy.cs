@@ -6,8 +6,9 @@ namespace WebApiOrderBook.Repositories.Interfaces
     {
         #region Methods
         Task<IEnumerable<Order>> GetAllOrderAsync();
-        Task<IEnumerable<Order>> GetFilteredOrders(int number, DateTime data);
-        Task<Order?> AddOrderAsync(Order order, Book book); 
+        Task<IEnumerable<Order>> GetFilteredOrdersAsync(int number, DateTime data);
+        Task<Order?> AddOrderAsync(Order order, Book book);
+        Task<Order?> AddNewBookInOrderAsync(Guid idOrder, Book book);
         #endregion
     }
 }
